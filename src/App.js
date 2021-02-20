@@ -1,5 +1,4 @@
 function App() {
-  // egzampleee
   return (
     <div className="grid-container">
       
@@ -8,7 +7,7 @@ function App() {
       </header>
 
       <main>
-        Product List
+        Product List sezer
       </main>
 
 
