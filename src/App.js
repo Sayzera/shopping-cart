@@ -7,7 +7,7 @@ function App() {
       </header>
 
       <main>
-        Product List deneme
+        Product List
       </main>
 
 
