@@ -7,7 +7,7 @@ function App() {
       </header>
 
       <main>
-        Product Listtsee ssssezer dsdadasdv dsdadsadsada
+        Product Listtsee ramazan
       </main>
 
 
