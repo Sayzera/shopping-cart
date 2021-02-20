@@ -7,7 +7,7 @@ function App() {
       </header>
 
       <main>
-        Product List sezer
+        Product List
       </main>
 
 
