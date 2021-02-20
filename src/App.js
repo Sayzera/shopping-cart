@@ -7,7 +7,7 @@ function App() {
       </header>
 
       <main>
-        Product Listtsee ramazan
+        Product List
       </main>
 
 
