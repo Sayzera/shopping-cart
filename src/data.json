@@ -6,7 +6,7 @@
           "image": "/images/dress1.jpg",
           "description":"about dress1",
           "price": 19.6,
-          "availableSize": ["XL", "XXL"]
+          "availableSize": ["S", "XXL"]
       },
       {
         "_id" : "dress2",
@@ -14,7 +14,7 @@
         "image": "/images/dress2.jpg",
         "description":"about dress2",
         "price": 12.9,
-        "availableSize": ["XL", "XXL"]
+        "availableSize": ["M", "S"]
     },
     {
         "_id" : "dress3",
