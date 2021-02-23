@@ -2,16 +2,73 @@ import React from "react";
 import Products from "./components/Products";
 import data from "./data.json";
 import Filter from './components/Filter';
+import Cart from "./components/Cart";
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
       products: data.products,
+      cartItems: [],
       size:"",
       sort:""
     }
+ 
   } 
+
+  addToCart = (product) => {
+    const cartItems = this.state.cartItems.slice();
+    let alreadyIncart = false;
+    // daha önce eklenmiş ise ekleme 
+    cartItems.map( (cartItem) => {
+      if(cartItem._id === product._id){
+        alreadyIncart = true;
+        cartItem['productCount']++;
+      }
+      this.setState({cartItems: cartItems})
+    });
+   
+    if(!alreadyIncart) {
+      cartItems.push(product);
+      this.setState({cartItems: cartItems})
+    }
+  }
+
+  removeFromCart = (item) => {
+   let deleteItem = false;
+   let deleteItemIndex = 0;
+   let remevoArr = false;
+   
+   this.state.cartItems.map((stateItem,i) => {
+      if(item._id === stateItem._id) {
+
+        // tek tek kaldır 
+          if(stateItem.productCount > 1) {
+            deleteItem = true;
+            deleteItemIndex = i;
+          } else {
+        // tek elemen ise diziyi kaldır 
+            remevoArr = true;
+            deleteItemIndex = i;
+          }
+
+      }
+  
+    });
+
+
+    if(deleteItem) {
+      this.state.cartItems[deleteItemIndex].productCount--;
+      this.setState({cartItems: this.state.cartItems})
+    }
+
+    if(remevoArr) {
+      this.state.cartItems.splice(deleteItemIndex,1);
+      this.setState({cartItems: this.state.cartItems})
+    }
+    
+
+  }
 
   sortProducts = (event) => {
   //impl
@@ -35,6 +92,8 @@ class App extends React.Component {
 
   }
 
+
+
   filterProducts = (event) => {
   //impl
   // bedenlere görele sıralama yapar ve sonra set eder
@@ -49,6 +108,7 @@ class App extends React.Component {
 
   }
 
+  
   render() { 
     return (
       <>
@@ -66,11 +126,12 @@ class App extends React.Component {
                  filterProducts={this.filterProducts}
                  sortProducts={this.sortProducts}
                />
-               <Products products={this.state.products} />
+               <Products products={this.state.products}
+               addToCart = {this.addToCart} />
               </div>
 
               <div className="main">
-              carts items 
+               <Cart cartItems = {this.state.cartItems} removeFromCart={this.removeFromCart} />
               </div>
 
               <div className="sidebar">
