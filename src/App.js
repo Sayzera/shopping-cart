@@ -9,12 +9,16 @@ class App extends React.Component {
     super();
     this.state = {
       products: data.products,
-      cartItems: [],
+      cartItems: JSON.parse(localStorage.getItem('cartItems')) !==null ? JSON.parse(localStorage.getItem('cartItems')) : [],
       size:"",
       sort:""
     }
  
   } 
+
+  createOrder = (order) => {
+    console.log(order);
+  }
 
   addToCart = (product) => {
     const cartItems = this.state.cartItems.slice();
@@ -32,6 +36,8 @@ class App extends React.Component {
       cartItems.push(product);
       this.setState({cartItems: cartItems})
     }
+
+    localStorage.setItem('cartItems',JSON.stringify(cartItems));
   }
 
   removeFromCart = (item) => {
@@ -53,7 +59,7 @@ class App extends React.Component {
           }
 
       }
-  
+
     });
 
 
@@ -66,6 +72,8 @@ class App extends React.Component {
       this.state.cartItems.splice(deleteItemIndex,1);
       this.setState({cartItems: this.state.cartItems})
     }
+
+    localStorage.setItem('cartItems',JSON.stringify(this.state.cartItems));
     
 
   }
@@ -131,7 +139,7 @@ class App extends React.Component {
               </div>
 
               <div className="main">
-               <Cart cartItems = {this.state.cartItems} removeFromCart={this.removeFromCart} />
+               <Cart createOrder={this.createOrder} cartItems = {this.state.cartItems} removeFromCart={this.removeFromCart} />
               </div>
 
               <div className="sidebar">
