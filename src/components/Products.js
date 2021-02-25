@@ -27,10 +27,6 @@ class Products extends Component {
   componentDidMount() {
     this.props.fetchProducts();
 
-    setTimeout(() => {
-        console.log(this.props)
-    }, 1000);
- 
   }
 
  
@@ -117,6 +113,6 @@ class Products extends Component {
 export default connect((state) => {
   // burdaki değeri props olarak alabilirz
   return {
-    product: state.products.items
+    products: state.products.filteredItems
   }
 },{fetchProducts})(Products);
