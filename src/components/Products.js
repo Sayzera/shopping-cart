@@ -3,8 +3,11 @@ import React, { Component } from "react";
 import formatCurreny from "../util";
 import {Fade, Zoom} from 'react-reveal';
 import Modal from 'react-modal';
+import {connect} from 'react-redux';
 
-export default class Products extends Component {
+import {fetchProducts} from '../actions/productsActions';
+
+class Products extends Component {
   constructor(props) {
     super(props);
 
@@ -21,13 +24,25 @@ export default class Products extends Component {
     this.setState({product: null})
   }
 
+  componentDidMount() {
+    this.props.fetchProducts();
+
+    setTimeout(() => {
+        console.log(this.props)
+    }, 1000);
+ 
+  }
+
  
   render() {
     const { product } = this.state;
     return (
       <div>
       <Fade bottom cascade={true}>
-        <ul className="products">
+      {
+        !this.props.products ?
+         (<div>loading...</div>) : (
+          <ul className="products">
           {this.props.products.map((product) => (
             <li key={product._id}>
               <div className="product">
@@ -48,6 +63,10 @@ export default class Products extends Component {
             </li>
           ))}
         </ul>
+         )
+        
+      }
+      
         </Fade>
 
         {
@@ -93,3 +112,11 @@ export default class Products extends Component {
     );
   }
 }
+
+
+export default connect((state) => {
+  // burdaki değeri props olarak alabilirz
+  return {
+    product: state.products.items
+  }
+},{fetchProducts})(Products);
