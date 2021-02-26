@@ -6,6 +6,8 @@ import Modal from 'react-modal';
 import {connect} from 'react-redux';
 
 import {fetchProducts} from '../actions/productsActions';
+import {addToCart} from '../actions/cartActions';
+import { json } from "body-parser";
 
 class Products extends Component {
   constructor(props) {
@@ -49,7 +51,10 @@ class Products extends Component {
                 <div className="product-price">
                   <div>{formatCurreny(product.price)}</div>
                   <button
-                    onClick={() => this.props.addToCart(product)}
+                    onClick={() => {
+                      // Redux ile ekleme işlemi
+                      this.props.addToCart(JSON.parse(localStorage.getItem('cartItems')),product);
+                    }}
                     className="button primary"
                   >
                     add to cart
@@ -94,6 +99,7 @@ class Products extends Component {
                             <button className="button primary" onClick={() => {
                               this.closeModal();
                               this.props.addToCart(product);
+                        
                             }}>Add to cart</button>
                           </div>
                       </div>
@@ -112,7 +118,9 @@ class Products extends Component {
 
 export default connect((state) => {
   // burdaki değeri props olarak alabilirz
+
   return {
-    products: state.products.filteredItems
+    products: state.products.filteredItems,
+    cart : state.cart.data
   }
-},{fetchProducts})(Products);
+},{fetchProducts, addToCart})(Products);

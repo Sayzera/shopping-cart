@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import formatCurreny from "../util";
 import Fade from 'react-reveal/Fade';
+import { connect } from "react-redux";
 
-export default class Cart extends Component {
+import {removeFromCart} from '../actions/cartActions';
+
+class Cart extends Component {
   
   constructor(props) {
       super(props); 
@@ -19,7 +22,6 @@ export default class Cart extends Component {
   }
 
   createOrder = (e) => {
-    
     e.preventDefault();
     let order = [];
     order.push(this.state.formElements,this.props.cartItems)
@@ -31,9 +33,11 @@ export default class Cart extends Component {
 
   render() {
     const { cartItems } = this.props;
+   
+    
     return (
       <div>
-        {cartItems.length === 0 ? (
+        {cartItems === undefined ?  (
           <div className="cart cart-header"> Cart is Empty </div>
         ) : (
           <div className="cart cart-header">You have {cartItems.length}</div>
@@ -53,7 +57,11 @@ export default class Cart extends Component {
                   <div>{item.title}</div>
                   <div className="right">
                     {formatCurreny(item.price)} x {item.productCount}{" "}
-                    <button onClick={() => this.props.removeFromCart(item)}>
+                    <button onClick={() => {
+                      // this.props.removeFromCart(item);
+                      this.props.removeFromCart(item, cartItems
+                      );
+                    }}>
                       Remove
                     </button>
                   </div>
@@ -126,3 +134,10 @@ export default class Cart extends Component {
     );
   }
 }
+
+export default connect(state => {
+  console.log(state);
+  return {
+    cartItems: state.cart.cartItems ?  state.cart.cartItems : state.cart
+  }
+}, {removeFromCart})(Cart)

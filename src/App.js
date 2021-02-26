@@ -19,65 +19,6 @@ class App extends React.Component {
     console.log(order);
   }
 
-  addToCart = (product) => {
-    const cartItems = this.state.cartItems.slice();
-    let alreadyIncart = false;
-    // daha önce eklenmiş ise ekleme 
-    cartItems.map( (cartItem) => {
-      if(cartItem._id === product._id){
-        alreadyIncart = true;
-        cartItem['productCount']++;
-      }
-      this.setState({cartItems: cartItems})
-    });
-   
-    if(!alreadyIncart) {
-      cartItems.push(product);
-      this.setState({cartItems: cartItems})
-    }
-
-    localStorage.setItem('cartItems',JSON.stringify(cartItems));
-  }
-
-  removeFromCart = (item) => {
-   let deleteItem = false;
-   let deleteItemIndex = 0;
-   let remevoArr = false;
-   
-   this.state.cartItems.map((stateItem,i) => {
-      if(item._id === stateItem._id) {
-
-        // tek tek kaldır 
-          if(stateItem.productCount > 1) {
-            deleteItem = true;
-            deleteItemIndex = i;
-          } else {
-        // tek elemen ise diziyi kaldır 
-            remevoArr = true;
-            deleteItemIndex = i;
-          }
-
-      }
-
-    });
-
-
-    if(deleteItem) {
-      this.state.cartItems[deleteItemIndex].productCount--;
-      this.setState({cartItems: this.state.cartItems})
-    }
-
-    if(remevoArr) {
-      this.state.cartItems.splice(deleteItemIndex,1);
-      this.setState({cartItems: this.state.cartItems})
-    }
-
-    localStorage.setItem('cartItems',JSON.stringify(this.state.cartItems));
-    
-
-  }
-
- 
 
 
   
