@@ -1,8 +1,7 @@
 import { ADD_TO_CART, REMOVE_FROM_CART } from "../types"
 
 export const addToCart = (items, product) => (dispatch) => {
-  
-    const cartItems = items.slice();
+    const cartItems = items ? items.slice() : []
     let alreadyIncart = false;
 
 

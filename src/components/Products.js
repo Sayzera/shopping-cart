@@ -7,7 +7,6 @@ import {connect} from 'react-redux';
 
 import {fetchProducts} from '../actions/productsActions';
 import {addToCart} from '../actions/cartActions';
-import { json } from "body-parser";
 
 class Products extends Component {
   constructor(props) {

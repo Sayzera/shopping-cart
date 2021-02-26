@@ -4,7 +4,9 @@ import Fade from 'react-reveal/Fade';
 import { connect } from "react-redux";
 
 import {removeFromCart} from '../actions/cartActions';
-
+import Modal from 'react-modal';
+import {createOrder, clearOrder} from '../actions/orderActions';
+import { Zoom } from "react-reveal";
 class Cart extends Component {
   
   constructor(props) {
@@ -15,26 +17,31 @@ class Cart extends Component {
       }
   }
 
-
+ closeModal = () => {
+   this.props.clearOrder();
+ 
+ }
   handleInput = (e) => {
     this.state.formElements[e.target.name] = e.target.value;
     this.setState({formElements:this.state.formElements})
   }
 
-  createOrder = (e) => {
+  _createOrder = (e) => {
     e.preventDefault();
-    let order = [];
-    order.push(this.state.formElements,this.props.cartItems)
+    let order = {};
+    order = {...this.state.formElements, cartItems: this.props.cartItems,total:
+       this.props.cartItems.reduce((a,c) => a + c.price * c.productCount, 0)
+    }
 
     this.props.createOrder(order);
+    
   }
 
 
 
   render() {
-    const { cartItems } = this.props;
-   
-    
+    const { cartItems, order } = this.props;
+  
     return (
       <div>
         {cartItems === undefined ?  (
@@ -42,6 +49,44 @@ class Cart extends Component {
         ) : (
           <div className="cart cart-header">You have {cartItems.length}</div>
         )}
+
+
+        {order ? (
+          <Modal isOpen={true}>
+            <Zoom>
+              <button className="close-modal" onClick={this.closeModal}>X</button>
+              <div className="order-details">
+                <h3 className="success-message">Your order has been placed</h3>
+                <h2>Order {order._id}</h2>
+                <ul>
+                  <li>
+                    <div>Name:</div>
+                    <div>{order.name}</div>
+                  </li>
+                  <li>
+                    <div>Email:</div>
+                    <div>{order.email}</div>
+                  </li>
+                  <li>
+                    <div>Total:</div>
+                    <div>{formatCurreny(order.total)}</div>
+                  </li>
+                  <li>
+                    <div>Cart Items:</div>
+                    <div>
+                      {order.cartItems.map(x => (
+                        <div>
+                        {' '}
+                        {x.productCount} * {x.title}
+                        </div>
+                      ))}
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </Zoom>
+          </Modal>
+        ) : <div> </div>}
 
         <div className="cart">
           <ul className="cart-items">
@@ -97,8 +142,9 @@ class Cart extends Component {
         </div>
         {this.state.showCheckout  &&  (
             <Fade right cascade>
+
              <div className="cart"> 
-                <form onSubmit={this.createOrder}>
+                <form onSubmit={this._createOrder}>
                     <ul className="form-container">
                         <li>
                             <label>Email</label>
@@ -136,8 +182,11 @@ class Cart extends Component {
 }
 
 export default connect(state => {
-  console.log(state);
+  if(state.order.clearData) { state.cart.cartItems = [] }
+
+  
   return {
-    cartItems: state.cart.cartItems ?  state.cart.cartItems : state.cart
+    cartItems: state.cart.cartItems ?  state.cart.cartItems : state.cart,
+    order : state.order.order
   }
-}, {removeFromCart})(Cart)
+}, {removeFromCart, createOrder, clearOrder})(Cart)
